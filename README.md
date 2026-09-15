@@ -59,3 +59,31 @@ print(result["latency_seconds"])
 ### Output
 - Local persistent ChromaDB index under `outputs/chroma/`
 - Query result payload with `chunks`, `distances`, and `latency_seconds`
+
+## Module 4: Structured Report Generator
+
+### Example usage
+```python
+from src.module4_report_generator import generate_structured_report
+
+def mock_llm(_prompt: str):
+    return {
+        "Eligible_For_Vaccine": True,
+        "Recommended_Dose_mg": 2.5,
+        "Reasoning_Steps": ["Used module outputs only."],
+        "FDA_Safety_Warnings_Cited": ["Monitor adverse effects."],
+        "Disclaimer": "placeholder"
+    }
+
+result = generate_structured_report(
+    module1_risk_output={"risk_score": 0.27},
+    retrieved_chunks=["Maximum safe dose for this profile is 3.0 mg."],
+    llm_callable=mock_llm,
+)
+print(result["report"])
+```
+
+### Output
+- Validated structured report persisted as matching files in `outputs/reports/`:
+  - `*.json`
+  - `*.md`
