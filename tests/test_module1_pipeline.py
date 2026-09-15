@@ -69,11 +69,16 @@ class Module1PipelineTests(unittest.TestCase):
             for model_name in ["logistic_regression", "random_forest"]:
                 report_path = Path(tmp_dir) / f"classification_report_{model_name}.txt"
                 matrix_path = Path(tmp_dir) / f"confusion_matrix_{model_name}.csv"
+                roc_path = Path(tmp_dir) / f"roc_curve_{model_name}.csv"
                 self.assertTrue(report_path.exists())
                 self.assertTrue(matrix_path.exists())
+                self.assertTrue(roc_path.exists())
                 self.assertTrue(len(report_path.read_text().strip()) > 0)
                 matrix = pd.read_csv(matrix_path)
+                roc = pd.read_csv(roc_path)
                 self.assertGreater(matrix.shape[0], 0)
+                self.assertIn("fpr", roc.columns)
+                self.assertIn("tpr", roc.columns)
 
             model_path = Path(tmp_dir) / "risk_model.joblib"
             self.assertTrue(model_path.exists())
