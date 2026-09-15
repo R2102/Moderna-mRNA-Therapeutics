@@ -29,3 +29,17 @@ The pipeline writes to `outputs/`:
 - `confusion_matrix_logistic_regression.csv`
 - `confusion_matrix_random_forest.csv`
 - `risk_model.joblib`
+
+## Module 2: Self-Attention Engine
+
+### Example usage
+```python
+from src.module2_attention import self_attention, render_attention_heatmap
+
+sequence = "ACGUACGUACGUACG"
+result = self_attention(sequence)
+render_attention_heatmap(result["attention_weights"])
+```
+
+### Output
+- `outputs/figures/attention_heatmap.png`
