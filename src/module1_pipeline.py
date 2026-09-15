@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, confusion_matrix, f1_score
+from sklearn.metrics import auc, classification_report, confusion_matrix, f1_score, roc_curve
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
@@ -170,6 +170,24 @@ def evaluate_and_save_artifacts(
         pd.DataFrame(matrix).to_csv(
             outputs_dir / f"confusion_matrix_{model_name}.csv", index=False
         )
+
+        if hasattr(model, "predict_proba"):
+            unique_targets = np.unique(y_test)
+            if len(unique_targets) == 2:
+                positive_label = unique_targets.max()
+                positive_scores = model.predict_proba(x_test)[:, 1]
+                fpr, tpr, thresholds = roc_curve(
+                    y_test, positive_scores, pos_label=positive_label
+                )
+                roc_auc = auc(fpr, tpr)
+                pd.DataFrame(
+                    {
+                        "fpr": fpr,
+                        "tpr": tpr,
+                        "threshold": thresholds,
+                        "auc": [roc_auc] * len(fpr),
+                    }
+                ).to_csv(outputs_dir / f"roc_curve_{model_name}.csv", index=False)
 
         metrics[model_name] = {
             "f1": f1,

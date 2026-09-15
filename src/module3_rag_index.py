@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+from datetime import datetime, timezone
 from pathlib import Path
 from time import perf_counter
 from typing import Callable
@@ -141,6 +143,7 @@ def query_guidelines(
     model_name: str = DEFAULT_EMBEDDING_MODEL,
     top_k: int = 3,
     embedding_function: Callable[[list[str]], np.ndarray] | None = None,
+    latency_log_path: Path | str | None = None,
 ) -> dict[str, object]:
     if not isinstance(question, str) or not question.strip():
         raise ValueError("question must be a non-empty string.")
@@ -168,6 +171,26 @@ def query_guidelines(
     )
     latency_seconds = max(perf_counter() - start_time, 1e-9)
 
+    log_path = (
+        Path(latency_log_path)
+        if latency_log_path is not None
+        else Path(persist_directory) / "query_latency_log.jsonl"
+    )
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    with log_path.open("a", encoding="utf-8") as log_file:
+        log_file.write(
+            json.dumps(
+                {
+                    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+                    "question": question,
+                    "collection_name": collection_name,
+                    "top_k": top_k,
+                    "latency_seconds": latency_seconds,
+                }
+            )
+            + "\n"
+        )
+
     chunks = result["documents"][0]
     distances = result["distances"][0]
 
@@ -175,4 +198,5 @@ def query_guidelines(
         "chunks": chunks,
         "distances": distances,
         "latency_seconds": latency_seconds,
+        "latency_log_path": log_path,
     }
