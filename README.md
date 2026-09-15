@@ -43,3 +43,19 @@ render_attention_heatmap(result["attention_weights"])
 
 ### Output
 - `outputs/figures/attention_heatmap.png`
+
+## Module 3: RAG Retrieval Index
+
+### Example usage
+```python
+from src.module3_rag_index import build_guideline_index, query_guidelines
+
+build_guideline_index("data/guidelines.txt")
+result = query_guidelines("What are the contraindications?")
+print(result["chunks"])
+print(result["latency_seconds"])
+```
+
+### Output
+- Local persistent ChromaDB index under `outputs/chroma/`
+- Query result payload with `chunks`, `distances`, and `latency_seconds`
