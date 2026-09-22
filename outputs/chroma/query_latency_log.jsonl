@@ -1,0 +1,4 @@
+{"timestamp_utc": "2026-09-22T04:05:54.206030+00:00", "question": "What is the recommended dose schedule?", "collection_name": "guideline_chunks", "top_k": 3, "latency_seconds": 0.0017376270000113436}
+{"timestamp_utc": "2026-09-22T04:05:54.214959+00:00", "question": "How should the formulation be kept in storage?", "collection_name": "guideline_chunks", "top_k": 3, "latency_seconds": 0.0014075530000354775}
+{"timestamp_utc": "2026-09-22T04:05:54.221035+00:00", "question": "Which adverse events are highlighted?", "collection_name": "guideline_chunks", "top_k": 3, "latency_seconds": 0.0012931040000694338}
+{"timestamp_utc": "2026-09-22T04:05:54.227213+00:00", "question": "What are the pregnancy safety notes?", "collection_name": "guideline_chunks", "top_k": 3, "latency_seconds": 0.00127158899999813}
